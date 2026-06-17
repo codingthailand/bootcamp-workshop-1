@@ -3,6 +3,7 @@ import { K2D } from "next/font/google";
 import "../globals.css";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 const k2d = K2D({
     subsets: ['thai'],
@@ -21,7 +22,9 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
 
-  const session = await auth.api.getSession();
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
   if (session?.user.role !== 'admin') {
     redirect('/');
   }  
