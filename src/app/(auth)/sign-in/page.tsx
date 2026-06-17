@@ -52,9 +52,14 @@ export default function LoginForm() {
         email: data.email,
         password: data.password
        }, {
-        onSuccess: () => {
+        onSuccess: async () => {
           alert('เข้าสู่ระบบสำเร็จ');
-          router.replace('/');
+          const { data: session } = await authClient.getSession();
+          if (session?.user.role === 'admin') {
+              router.replace('/dashboard');
+          } else {
+              router.replace('/');
+          }
         },
         onError: (ctx) => {
           alert(JSON.stringify(ctx.error));

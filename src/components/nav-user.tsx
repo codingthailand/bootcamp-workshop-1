@@ -20,7 +20,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { authClient } from "@/lib/auth-client"
 import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export function NavUser({
   user,
@@ -28,10 +30,12 @@ export function NavUser({
   user: {
     name: string
     email: string
-    avatar: string
+    avatar?: string
+    role: string
   }
 }) {
   const { isMobile } = useSidebar()
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -49,7 +53,7 @@ export function NavUser({
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {user.email}
+                  {user.email} role: {user.role}
                 </span>
               </div>
               <EllipsisVerticalIcon className="ml-auto size-4" />
@@ -70,7 +74,7 @@ export function NavUser({
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="truncate text-xs text-muted-foreground">
-                    {user.email}
+                    {user.email} role: {user.role}
                   </span>
                 </div>
               </div>
@@ -94,7 +98,17 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={
+              async () => {
+                await authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.replace('/');
+                    }
+                  }
+                });
+              }
+            }>
               <LogOutIcon
               />
               Log out
