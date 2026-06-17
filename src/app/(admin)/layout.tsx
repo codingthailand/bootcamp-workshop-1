@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { Suspense } from "react";
+import DLayout from "./dashboard/DLayout";
 
 const k2d = K2D({
     subsets: ['thai'],
@@ -43,7 +44,11 @@ export default async function DashboardLayout({
     >
       <body>
         <Suspense fallback={<div>Loading...</div>}>
-          <AdminGuard>{children}</AdminGuard>
+          <AdminGuard>
+            <DLayout>
+              {children}
+            </DLayout>
+          </AdminGuard>
         </Suspense>
       </body>
     </html>
