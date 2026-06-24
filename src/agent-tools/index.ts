@@ -19,6 +19,8 @@ export const searchAllProductTool = tool(
   async ({ query }) => {
     const keyword = query.trim();
 
+    console.log(keyword);
+
     if (!keyword) {
       return JSON.stringify({
         success: false,
