@@ -13,7 +13,7 @@ async function ChatContent() {
   if (!session) {
     redirect('/sign-in');
   }
-  return <ChatWindowV19 email={session.user.email} id={Number(session.user.id)} />;
+  return <ChatWindowV19 email={session.user.email} id={session.user.id} />;
 }
 
 export default function ChatPage() {

@@ -15,7 +15,7 @@ interface ChatHistoryItem {
 
 interface ChatWindowV19Props {
   email: string;
-  id: number;
+  id: string;
 }
 
 interface ChatAreaProps {

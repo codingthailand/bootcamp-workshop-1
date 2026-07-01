@@ -18,6 +18,7 @@ model customers {
   name    String?  @db.VarChar(255)
   address String?  @db.VarChar(500)
   phone   String?  @db.VarChar(20)
+  userId  String
   orders  orders[]
 }
 
