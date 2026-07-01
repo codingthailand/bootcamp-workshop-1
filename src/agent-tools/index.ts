@@ -1,6 +1,7 @@
 import * as z from "zod"
 import { tool } from "langchain"
 import { prisma } from "@/lib/prisma";
+import { SKILLS } from "@/skills";
 
 export const getCurrentDateTool = tool(
   () => {
@@ -82,6 +83,73 @@ export const searchAllProductTool = tool(
       query: z
         .string()
         .describe("Search keyword. Can be product id, product name, or description."),
+    }),
+  }
+);
+
+export const loadSkill = tool(  
+  async ({ skillName }) => {
+    // Find and return the requested skill
+    const skill = SKILLS.find((s) => s.name === skillName);
+    if (skill) {
+      return `Loaded skill: ${skillName}\n\n${skill.content}`;
+    }
+
+    // Skill not found
+    const available = SKILLS.map((s) => s.name).join(", ");
+    return `Skill '${skillName}' not found. Available skills: ${available}`;
+  },
+  {
+    name: "load_skill",
+    description: `Load the full content of a skill into the agent's context.
+
+Use this when you need detailed information about how to handle a specific
+type of request. This will provide you with comprehensive instructions,
+policies, and guidelines for the skill area.`,
+    schema: z.object({
+      skillName: z.string().describe("The name of the skill to load"),
+    }),
+  }
+);
+
+// ExecuteSQL Tool
+export const executeSql = tool(
+  async ({ query }) => {
+    try {
+      const normalized = query.trim().toUpperCase();
+
+      if (!normalized.startsWith("SELECT")) {
+        return "Blocked: only SELECT queries are allowed.";
+      }
+
+      const rows = await prisma.$queryRawUnsafe<Record<string, unknown>[]>(query);
+
+      if (rows.length > 0) {
+        // Prisma คืน BigInt สำหรับ COUNT/int8 — แปลงเป็น Number ไม่ให้ JSON.stringify พัง
+        return JSON.stringify(
+          rows,
+          (_, v) => (typeof v === "bigint" ? Number(v) : v),
+          2,
+        );
+      }
+
+      return "No results found.";
+    } catch (error) {
+      return `SQL Error: ${(error as Error).message}`;
+    }
+  },
+  {
+    name: "execute_sql",
+    description: `Execute a read-only SELECT query against the MariaDB database.
+
+Only SELECT statements are allowed. Supports:
+- SELECT with WHERE, JOIN, GROUP BY, HAVING, ORDER BY, LIMIT
+- Aggregations: COUNT, SUM, AVG, MIN, MAX
+- Subqueries and CTEs (WITH ... SELECT)
+
+Use standard MariaDB syntax.`,
+    schema: z.object({
+      query: z.string().describe("The SELECT query to execute"),
     }),
   }
 );

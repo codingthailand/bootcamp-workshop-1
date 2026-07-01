@@ -3,12 +3,13 @@ import { ChatOllama } from "@langchain/ollama";
 import { createAgent } from "langchain";
 import { createUIMessageStreamResponse, UIMessage } from "ai";
 import { toBaseMessages, toUIMessageStream } from "@ai-sdk/langchain";
-import { getCurrentDateTool, searchAllProductTool } from "@/agent-tools";
+import { executeSql, getCurrentDateTool, searchAllProductTool } from "@/agent-tools";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getCheckpointer } from "@/db/checkpointer";
 import { prisma } from "@/lib/prisma";
+import { skillMiddleware } from "@/agent-middlewares/skill-prompt";
 
 const llmModel = new ChatOllama({
     model: 'gemma4:31b-cloud',
@@ -38,10 +39,21 @@ export async function POST(req: NextRequest) {
     const agent = createAgent({
         name: 'customer_support_agent',
         model: llmModel,
-        systemPrompt: `คุณเป็น Ecommerce Customer Support ถ้าถามข้อมูลเกี่ยวกับวันที่และเวลาปัจจุบันให้เรียกใช้เครื่องมือ get_current_date เสมอ ห้ามเดาคำตอบ
-        ช่วยตอบคำถามเกี่ยวกับสินค้า บริการ คำสั่งซื้อให้กับลูกค้า รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name} ตอบเป็นภาษาไทย และสุภาพ`,
-        tools: [ getCurrentDateTool, searchAllProductTool ],
+        systemPrompt: `
+        คุณเป็น Ecommerce Customer Support 
+        
+        รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name}
+
+        - ถ้าถามข้อมูลเกี่ยวกับวันที่และเวลาปัจจุบันให้เรียกใช้เครื่องมือ get_current_date เสมอ ห้ามเดาคำตอบ
+        - ช่วยตอบคำถามเกี่ยวกับสินค้า บริการ คำสั่งซื้อให้กับลูกค้า ให้เรียก search_product_database
+        - ถ้าถามข้อมูลเกี่ยวกับยอดขาย รายได้ สรุปยอดขายให้เรียก load_skill('sale-analytics') ก่อน แล้วเขียน SQL (MariaDB) ส่งให้ -> execute_sql
+        - ตอบเป็นภาษาไทย และสุภาพ
+        `,
+        tools: [ getCurrentDateTool, searchAllProductTool, executeSql ],
         checkpointer: checkpointer,
+        middleware: [
+            skillMiddleware,
+        ]
     });
     
     const response = agent.streamEvents(
