@@ -5,8 +5,6 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
-export const dynamic = 'force-dynamic';
-
 // ดึงเฉพาะ text ที่ user ต้องเห็น (ตัด thinking / tool_use blocks ทิ้ง)
 function extractText(content: BaseMessage["content"]): string {
     if (typeof content === 'string') return content;
