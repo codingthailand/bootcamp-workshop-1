@@ -8,6 +8,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getCheckpointer } from "@/db/checkpointer";
+import { prisma } from "@/lib/prisma";
 
 const llmModel = new ChatOllama({
     model: 'gemma4:31b-cloud',
@@ -48,7 +49,25 @@ export async function POST(req: NextRequest) {
       { streamMode: ['messages'], configurable: { thread_id: sessionId } }
     );
 
-    const uiStream = toUIMessageStream(response);
+    const uiStream = toUIMessageStream(response, {
+        onFinal: async () => {
+            const previewText = JSON.stringify(lastLangchainMessages.content.slice(0, 50) ?? '');
+            await prisma.chatThread.upsert({
+                where: { threadId: sessionId },
+                update: {
+                    preview: previewText,
+                    messageCount: { increment: 2 },
+                    updatedAt: new Date()
+                },
+                create: {
+                    threadId: sessionId,
+                    userId: session.user.id,
+                    preview: previewText,
+                    messageCount: 2
+                }
+            });
+        }
+    });
     
     return createUIMessageStreamResponse({ stream: uiStream });
 }
