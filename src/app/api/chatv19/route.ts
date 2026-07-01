@@ -12,7 +12,7 @@ import { prisma } from "@/lib/prisma";
 
 const llmModel = new ChatOllama({
     model: 'gemma4:31b-cloud',
-    think: false,
+    think: true,
     temperature: 0.2,
     maxRetries: 2,
 });
@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
     const agent = createAgent({
         name: 'customer_support_agent',
         model: llmModel,
-        systemPrompt: `คุณเป็น Ecommerce Customer Support ช่วยตอบคำถามเกี่ยวกับสินค้า บริการ 
-        คำสั่งซื้อให้กับลูกค้า ให้ข้อมูลเกี่ยวกับวันและเวลาปัจจุบัน รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name} ตอบเป็นภาษาไทย และสุภาพ`,
+        systemPrompt: `คุณเป็น Ecommerce Customer Support ถ้าถามข้อมูลเกี่ยวกับวันที่และเวลาปัจจุบันให้เรียกใช้เครื่องมือ get_current_date เสมอ ห้ามเดาคำตอบ
+        ช่วยตอบคำถามเกี่ยวกับสินค้า บริการ คำสั่งซื้อให้กับลูกค้า รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name} ตอบเป็นภาษาไทย และสุภาพ`,
         tools: [ getCurrentDateTool, searchAllProductTool ],
         checkpointer: checkpointer,
     });
