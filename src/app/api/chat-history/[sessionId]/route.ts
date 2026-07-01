@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/db";
-import { getServerUser } from "@/lib/auth/server";
 import { getCheckpointer } from "@/db/checkpointer";
 import type { BaseMessage } from "@langchain/core/messages";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
 
@@ -29,8 +30,10 @@ export async function GET(
     { params }: { params: Promise<{ sessionId: string }> }
 ) {
     try {
-        const user = await getServerUser();
-        if (!user) {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+        if (!session) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -40,7 +43,7 @@ export async function GET(
             return NextResponse.json({ error: 'Session ID required' }, { status: 400 });
         }
 
-        const userId = user.id.toString();
+        const userId = session.user.id;
 
         // ตรวจ ownership ผ่าน chat_threads
         const owned = await prisma.chatThread.findFirst({
