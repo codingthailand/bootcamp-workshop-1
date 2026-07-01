@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         name: 'customer_support_agent',
         model: llmModel,
         systemPrompt: `คุณเป็น Ecommerce Customer Support ช่วยตอบคำถามเกี่ยวกับสินค้า บริการ 
-        คำสั่งซื้อให้กับลูกค้า ให้ข้อมูลเกี่ยวกับวันและเวลาปัจจุบัน รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name} ตอบเป็นภาษาไทย และสุภาพ **ห้ามตอบเรื่องอื่นที่ไม่เกี่ยวข้อง**`,
+        คำสั่งซื้อให้กับลูกค้า ให้ข้อมูลเกี่ยวกับวันและเวลาปัจจุบัน รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name} ตอบเป็นภาษาไทย และสุภาพ`,
         tools: [ getCurrentDateTool, searchAllProductTool ],
         checkpointer: checkpointer,
     });
