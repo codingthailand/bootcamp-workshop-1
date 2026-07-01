@@ -52,7 +52,8 @@ export async function POST(req: NextRequest) {
     const uiStream = toUIMessageStream(response, {
         onFinal: async () => {
             const previewText = JSON.stringify(lastLangchainMessages.content.slice(0, 50) ?? '');
-            await prisma.chatThread.upsert({
+            console.log(previewText);
+            const res = await prisma.chatThread.upsert({
                 where: { threadId: sessionId },
                 update: {
                     preview: previewText,
@@ -66,6 +67,7 @@ export async function POST(req: NextRequest) {
                     messageCount: 2
                 }
             });
+            console.log(res.threadId);
         }
     });
     

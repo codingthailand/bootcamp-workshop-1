@@ -132,6 +132,17 @@ model Verification {
   @@map("verification")
 }
 
+model ChatThread {
+  threadId     String   @id @map("thread_id") @db.VarChar(64)
+  userId       String   @map("user_id")
+  preview      String?  @db.Text
+  messageCount Int      @default(0) @map("message_count")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime @default(now()) @map("updated_at") @db.Timestamp(6)
+
+  @@map("chat_threads")
+}
+
 enum orders_status {
   delivered
   received
@@ -141,15 +152,4 @@ enum orders_status {
 enum user_role {
   user
   admin
-}
-
-model ChatThread {
-  threadId     String   @id @map("thread_id") @db.VarChar(64)
-  userId       String   @map("user_id") @db.VarChar(191)
-  preview      String?  @db.Text
-  messageCount Int      @default(0) @map("message_count")
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt    DateTime @default(now()) @map("updated_at") @db.Timestamp(6)
-
-  @@map("chat_threads")
 }
