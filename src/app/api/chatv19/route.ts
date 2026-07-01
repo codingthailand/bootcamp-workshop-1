@@ -7,6 +7,7 @@ import { getCurrentDateTool, searchAllProductTool } from "@/agent-tools";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getCheckpointer } from "@/db/checkpointer";
 
 const llmModel = new ChatOllama({
     model: 'gemma4:31b-cloud',
@@ -23,9 +24,14 @@ export async function POST(req: NextRequest) {
         redirect('/sign-in');
     }
 
-    const { messages }: { messages: UIMessage[] } = await req.json();
+    const { messages, sessionId }: { messages: UIMessage[], sessionId: string } = await req.json();
 
-    const langchainMessages = await toBaseMessages(messages);
+    // ส่งให้ agent เฉพาะข้อความล่าสุดของ user เท่านั้นก็พอ
+    const lastUserUiMessage = [...messages].reverse().find((message) => message.role === 'user');
+    const [lastLangchainMessages] = lastUserUiMessage ? await toBaseMessages([lastUserUiMessage]) : [];
+
+    // Short-term memory
+    const checkpointer = await getCheckpointer();
 
     // create AI Agent
     const agent = createAgent({
@@ -34,12 +40,15 @@ export async function POST(req: NextRequest) {
         systemPrompt: `คุณเป็น Ecommerce Customer Support ช่วยตอบคำถามเกี่ยวกับสินค้า บริการ 
         คำสั่งซื้อให้กับลูกค้า ให้ข้อมูลเกี่ยวกับวันและเวลาปัจจุบัน รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name} ตอบเป็นภาษาไทย และสุภาพ **ห้ามตอบเรื่องอื่นที่ไม่เกี่ยวข้อง**`,
         tools: [ getCurrentDateTool, searchAllProductTool ],
+        checkpointer: checkpointer,
     });
     
     const response = agent.streamEvents(
-      { messages:  langchainMessages },
-      { streamMode: ['messages'] }
+      { messages:  lastLangchainMessages },
+      { streamMode: ['messages'], configurable: { thread_id: sessionId } }
     );
+
+    const uiStream = toUIMessageStream(response);
     
-    return createUIMessageStreamResponse({ stream: toUIMessageStream(response)});
+    return createUIMessageStreamResponse({ stream: uiStream });
 }
