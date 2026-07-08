@@ -42,14 +42,14 @@ export function ContactForm() {
         const json = await res.json()
 
         if (!res.ok || !json.success) {
-          toast.error(json.error || "เกิดข้อผิดพลาด กรุณาลองใหม่")
+          toast.error(json.error || "Something went wrong. Please try again.")
           return
         }
 
         form.reset()
         setSuccess(true)
       } catch {
-        toast.error("ไม่สามารถส่งข้อความได้ กรุณาลองใหม่ภายหลัง")
+        toast.error("Unable to send message. Please try again later.")
       }
     })
   }
@@ -57,10 +57,10 @@ export function ContactForm() {
   if (success) {
     return (
       <div className="flex flex-col items-center text-center gap-4 py-8">
-        <CheckCircleIcon className="size-12 text-green-500" />
-        <h3 className="text-xl font-semibold">ส่งข้อความสำเร็จ</h3>
-        <p className="text-muted-foreground">
-          ขอบคุณที่ติดต่อมา เราจะตอบกลับโดยเร็วที่สุด
+        <CheckCircleIcon className="size-12 text-success" />
+        <h3 className="font-heading text-[24px] font-bold tracking-[-0.03em]">Message Sent</h3>
+        <p className="text-[13px] text-text-secondary">
+          Thank you for reaching out. We&apos;ll get back to you soon.
         </p>
         <Button
           variant="outline"
@@ -69,7 +69,7 @@ export function ContactForm() {
             form.reset()
           }}
         >
-          ส่งข้อความอีกครั้ง
+          Send Another Message
         </Button>
       </div>
     )
@@ -83,12 +83,12 @@ export function ContactForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="contact-name">ชื่อ</FieldLabel>
+              <FieldLabel htmlFor="contact-name">Name</FieldLabel>
               <Input
                 {...field}
                 id="contact-name"
                 aria-invalid={fieldState.invalid}
-                placeholder="กรอกชื่อของคุณ"
+                placeholder="Your name"
               />
               {fieldState.invalid && (
                 <FieldError errors={[fieldState.error]} />
@@ -107,7 +107,7 @@ export function ContactForm() {
                 id="contact-email"
                 type="email"
                 aria-invalid={fieldState.invalid}
-                placeholder="example@email.com"
+                placeholder="you@example.com"
               />
               {fieldState.invalid && (
                 <FieldError errors={[fieldState.error]} />
@@ -120,13 +120,13 @@ export function ContactForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="contact-message">ข้อความ</FieldLabel>
+              <FieldLabel htmlFor="contact-message">Message</FieldLabel>
               <Textarea
                 {...field}
                 id="contact-message"
                 rows={5}
                 aria-invalid={fieldState.invalid}
-                placeholder="พิมพ์ข้อความที่ต้องการ..."
+                placeholder="What would you like to tell us?"
               />
               {fieldState.invalid && (
                 <FieldError errors={[fieldState.error]} />
@@ -136,7 +136,7 @@ export function ContactForm() {
         />
       </FieldGroup>
       <Button type="submit" className="w-full mt-6" disabled={isPending}>
-        {isPending ? "กำลังส่ง..." : "ส่งข้อความ"}
+        {isPending ? "Sending..." : "Send Message"}
       </Button>
     </form>
   )

@@ -2,42 +2,26 @@
 
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
-export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
-  <NavigationMenu {...props}>
-    <NavigationMenuList className="data-[orientation=vertical]:-ms-2 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start data-[orientation=vertical]:justify-start">
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="/">Home</Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="/product">Product</Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="/about">About</Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="/contact">ติดต่อเรา</Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-          <Link href="/users">Users</Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-    </NavigationMenuList>
-  </NavigationMenu>
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/product", label: "Product" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/users", label: "Users" },
+];
+
+export const NavMenu = ({ className, ...props }: ComponentProps<"nav">) => (
+  <nav className={cn("flex items-center gap-1", className)} {...props}>
+    {links.map((link) => (
+      <Link
+        key={link.href}
+        href={link.href}
+        className="rounded-md px-3 py-1.5 text-[14px] font-medium text-text-secondary transition-colors hover:bg-muted hover:text-foreground"
+      >
+        {link.label}
+      </Link>
+    ))}
+  </nav>
 );

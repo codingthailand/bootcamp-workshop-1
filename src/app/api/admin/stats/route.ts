@@ -52,7 +52,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching admin stats:", error)
     return NextResponse.json(
-      { error: "ไม่สามารถโหลดข้อมูลสถิติได้" },
+      { error: "Failed to load statistics" },
       { status: 500 }
     )
   }

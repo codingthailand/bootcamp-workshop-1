@@ -17,35 +17,37 @@ export default async function UsersPage() {
   });
 
   return (
-    <main className="container mx-auto py-8 px-4">
-      <h1 className="text-2xl font-bold mb-6">ผู้ใช้งานทั้งหมด</h1>
-      <div className="rounded-md border">
+    <main className="mx-auto max-w-[1280px] px-6 py-16">
+      <h1 className="font-heading text-[clamp(1.75rem,4vw,32px)] font-bold tracking-[-0.03em] mb-8">
+        Users
+      </h1>
+      <div className="overflow-hidden rounded-xl border border-border">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
-              <TableHead>ชื่อ</TableHead>
-              <TableHead>อีเมล</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead>Role</TableHead>
-              <TableHead>วันที่สร้าง</TableHead>
+              <TableHead>Created</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground">
-                  ไม่พบข้อมูลผู้ใช้งาน
+                <TableCell colSpan={5} className="text-center text-text-secondary">
+                  No users found
                 </TableCell>
               </TableRow>
             ) : (
               users.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell className="font-mono text-xs">{user.id}</TableCell>
-                  <TableCell>{user.name}</TableCell>
+                  <TableCell className="font-mono text-[12px]">{user.id}</TableCell>
+                  <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell className="capitalize">{user.role}</TableCell>
-                  <TableCell>
-                    {user.createdAt.toLocaleDateString("th-TH", {
+                  <TableCell className="text-[13px] text-text-secondary">
+                    {user.createdAt.toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",

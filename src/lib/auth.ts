@@ -24,7 +24,7 @@ export const auth = betterAuth({
         }
     },
     session: {
-        expiresIn: 60 * 60 * 24 * 7, // session จะหมดอายุ 7 วัน หน่วยเป็นวินาที
-        updateAge: 60 * 60 * 24 * 1, // ถ้าเกิน 1 วัน ระบบจะต่อายุ session expiration ใหม่
+        expiresIn: 60 * 60 * 24 * 7, // session expires in 7 days (seconds)
+        updateAge: 60 * 60 * 24 * 1, // refresh session expiration after 1 day
     }
 });

@@ -98,14 +98,14 @@ export function ProductFormModal({
         const json = await res.json()
 
         if (!json.success) {
-          toast.error(json.error || "เกิดข้อผิดพลาด")
+          toast.error(json.error || "Something went wrong")
           return
         }
 
-        toast.success(isEdit ? "แก้ไขสินค้าสำเร็จ" : "เพิ่มสินค้าสำเร็จ")
+        toast.success(isEdit ? "Product updated" : "Product created")
         onSuccess()
       } catch {
-        toast.error("เกิดข้อผิดพลาด กรุณาลองใหม่")
+        toast.error("Something went wrong. Please try again.")
       } finally {
         setSubmitting(false)
       }
@@ -117,11 +117,11 @@ export function ProductFormModal({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-lg">
         <SheetHeader>
-          <SheetTitle>{isEdit ? "แก้ไขสินค้า" : "เพิ่มสินค้า"}</SheetTitle>
+          <SheetTitle>{isEdit ? "Edit Product" : "Add Product"}</SheetTitle>
           <SheetDescription>
             {isEdit
-              ? `แก้ไขข้อมูลสินค้า "${product?.name}"`
-              : "กรอกข้อมูลสินค้าใหม่"}
+              ? `Update "${product?.name}"`
+              : "Enter the details for the new product"}
           </SheetDescription>
         </SheetHeader>
 
@@ -136,12 +136,12 @@ export function ProductFormModal({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="product-name">ชื่อสินค้า</FieldLabel>
+                  <FieldLabel htmlFor="product-name">Product Name</FieldLabel>
                   <Input
                     {...field}
                     id="product-name"
                     aria-invalid={fieldState.invalid}
-                    placeholder="ชื่อสินค้า"
+                    placeholder="Product name"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -155,13 +155,13 @@ export function ProductFormModal({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="product-desc">คำอธิบาย</FieldLabel>
+                  <FieldLabel htmlFor="product-desc">Description</FieldLabel>
                   <Textarea
                     {...field}
                     id="product-desc"
                     aria-invalid={fieldState.invalid}
                     rows={3}
-                    placeholder="รายละเอียดสินค้า (ไม่บังคับ)"
+                    placeholder="Product description (optional)"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -175,7 +175,7 @@ export function ProductFormModal({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="product-price">ราคา (บาท)</FieldLabel>
+                  <FieldLabel htmlFor="product-price">Price (USD)</FieldLabel>
                   <Input
                     {...field}
                     id="product-price"
@@ -197,7 +197,7 @@ export function ProductFormModal({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="product-category">หมวดหมู่</FieldLabel>
+                  <FieldLabel htmlFor="product-category">Category</FieldLabel>
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -206,7 +206,7 @@ export function ProductFormModal({
                       id="product-category"
                       aria-invalid={fieldState.invalid}
                     >
-                      <SelectValue placeholder="เลือกหมวดหมู่" />
+                      <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((cat) => (
@@ -224,18 +224,18 @@ export function ProductFormModal({
             />
           </FieldGroup>
 
-          <div className="flex items-center justify-end gap-2 border-t p-4">
+          <div className="flex items-center justify-end gap-2 border-t border-border p-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={submitting}
             >
-              ยกเลิก
+              Cancel
             </Button>
             <Button type="submit" form="product-form" disabled={submitting}>
               {submitting && <Spinner className="size-4" />}
-              {isEdit ? "บันทึก" : "เพิ่มสินค้า"}
+              {isEdit ? "Save" : "Add Product"}
             </Button>
           </div>
         </form>

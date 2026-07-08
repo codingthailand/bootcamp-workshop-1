@@ -14,30 +14,31 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, PackageIcon, Settings2Icon, CircleHelpIcon, CommandIcon } from "lucide-react"
+import { LayoutDashboardIcon, PackageIcon, Settings2Icon, CircleHelpIcon } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
+import Link from "next/link"
 
 const data = {
   navMain: [
     {
-      title: "แดชบอร์ด",
+      title: "Dashboard",
       url: "/dashboard",
       icon: <LayoutDashboardIcon />,
     },
     {
-      title: "สินค้า",
+      title: "Products",
       url: "/dashboard/products",
       icon: <PackageIcon />,
     },
   ],
   navSecondary: [
     {
-      title: "ตั้งค่า",
+      title: "Settings",
       url: "#",
       icon: <Settings2Icon />,
     },
     {
-      title: "ช่วยเหลือ",
+      title: "Help",
       url: "#",
       icon: <CircleHelpIcon />,
     },
@@ -56,10 +57,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <a href="#">
-                <CommandIcon className="size-5!" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link href="/dashboard">
+                <span className="font-heading text-base font-bold tracking-[-0.03em]">Genesis</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

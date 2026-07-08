@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: "ข้อมูลไม่ถูกต้อง" },
+        { success: false, error: "Invalid data" },
         { status: 400 }
       )
     }
@@ -26,13 +26,13 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: `Contact Form <onboarding@resend.dev>`,
       to: receiverEmail,
-      subject: `ข้อความติดต่อจาก ${name}`,
+      subject: `Contact message from ${name}`,
       replyTo: email,
       html: `
-        <h2>ข้อความติดต่อใหม่</h2>
-        <p><strong>ชื่อ:</strong> ${name}</p>
+        <h2>New contact message</h2>
+        <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>ข้อความ:</strong></p>
+        <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, "<br>")}</p>
       `,
     })
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Contact form error:", error)
     return NextResponse.json(
-      { success: false, error: "ไม่สามารถส่งข้อความได้ กรุณาลองใหม่ภายหลัง" },
+      { success: false, error: "Failed to send message. Please try again later." },
       { status: 500 }
     )
   }

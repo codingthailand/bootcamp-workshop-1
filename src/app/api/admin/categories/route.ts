@@ -27,7 +27,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching categories:", error)
     return NextResponse.json(
-      { success: false, error: "ไม่สามารถโหลดหมวดหมู่ได้" } satisfies ApiResponse<never>,
+      { success: false, error: "Failed to load categories" } satisfies ApiResponse<never>,
       { status: 500 }
     )
   }

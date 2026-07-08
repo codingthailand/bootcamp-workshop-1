@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Error listing products:", error)
     return NextResponse.json(
-      { success: false, error: "ไม่สามารถโหลดรายการสินค้าได้" } satisfies ApiResponse<never>,
+      { success: false, error: "Failed to load products" } satisfies ApiResponse<never>,
       { status: 500 }
     )
   }
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: "ข้อมูลไม่ถูกต้อง", errors: parsed.error.flatten().fieldErrors } satisfies ApiResponse<never> & { errors: unknown },
+        { success: false, error: "Invalid data", errors: parsed.error.flatten().fieldErrors } satisfies ApiResponse<never> & { errors: unknown },
         { status: 400 }
       )
     }
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error creating product:", error)
     return NextResponse.json(
-      { success: false, error: "ไม่สามารถสร้างสินค้าได้" } satisfies ApiResponse<never>,
+      { success: false, error: "Failed to create product" } satisfies ApiResponse<never>,
       { status: 500 }
     )
   }

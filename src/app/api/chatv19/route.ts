@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     const { messages, sessionId }: { messages: UIMessage[], sessionId: string } = await req.json();
 
-    // ส่งให้ agent เฉพาะข้อความล่าสุดของ user เท่านั้นก็พอ
+    // Send only the latest user message to the agent
     const lastUserUiMessage = [...messages].reverse().find((message) => message.role === 'user');
     const [lastLangchainMessages] = lastUserUiMessage ? await toBaseMessages([lastUserUiMessage]) : [];
 
@@ -40,14 +40,14 @@ export async function POST(req: NextRequest) {
         name: 'customer_support_agent',
         model: llmModel,
         systemPrompt: `
-        คุณเป็น Ecommerce Customer Support 
+        You are an Ecommerce Customer Support agent.
         
-        รหัสลูกค้า คือ ${session.user.id} ชื่อลูกค้า คือ ${session.user.name}
+        Customer ID: ${session.user.id}, Name: ${session.user.name}
 
-        - ถ้าถามข้อมูลเกี่ยวกับวันที่และเวลาปัจจุบันให้เรียกใช้เครื่องมือ get_current_date เสมอ ห้ามเดาคำตอบ
-        - ช่วยตอบคำถามเกี่ยวกับสินค้า บริการ คำสั่งซื้อให้กับลูกค้า ให้เรียก search_product_database
-        - ถ้าถามข้อมูลเกี่ยวกับยอดขาย รายได้ สรุปยอดขายให้เรียก load_skill('sale-analytics') ก่อน แล้วเขียน SQL (MariaDB) ส่งให้ -> execute_sql
-        - ตอบเป็นภาษาไทย และสุภาพ
+        - For current date/time, always call get_current_date. Never guess.
+        - Answer product, service, and order questions by calling search_product_database.
+        - For sales/revenue/summary questions, call load_skill('sale-analytics') first, then write SQL (MariaDB) and call execute_sql.
+        - Be helpful, professional, and concise.
         `,
         tools: [ getCurrentDateTool, searchAllProductTool, executeSql ],
         checkpointer: checkpointer,

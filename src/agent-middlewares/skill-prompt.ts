@@ -17,8 +17,9 @@ export const skillMiddleware = createMiddleware({
       "Use the load_skill tool when you need detailed information " +
       "about handling a specific type of request.";
 
-    // ต้องใช้ .concat() บน SystemMessage — ห้ามเอา object มาต่อ string ตรงๆ (จะกลายเป็น "[object Object]")
-    // และต้อง set ผ่าน key `systemMessage` ไม่ใช่ `systemPrompt` มิฉะนั้นจะทับ prompt เดิมทิ้ง
+    // Must use .concat() on SystemMessage — don't concatenate objects to strings
+    
+    // Must set via `systemMessage` key, not `systemPrompt`, otherwise it overwrites the existing prompt
     return handler({
       ...request,
       systemMessage: request.systemMessage.concat(skillsAddendum),

@@ -1,15 +1,7 @@
-import Image from "next/image";
+import { cn } from "@/lib/utils"
 
-export const Logo = () => (
-  <Image 
-    src="/next.svg" 
-    alt="โลโก้ Next.js" 
-    width={0} 
-    height={0}
-    loading="eager"
-    style={{
-      width: 124,
-      height: 32
-    }}
-  />
+export const Logo = ({ className }: { className?: string }) => (
+  <span className={cn("font-heading text-lg font-bold tracking-[-0.03em] text-foreground", className)}>
+    genesis
+  </span>
 );

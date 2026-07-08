@@ -30,9 +30,9 @@ const RevenueChart = dynamic(
   }
 )
 
-const currency = new Intl.NumberFormat("th-TH", {
+const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "THB",
+  currency: "USD",
 })
 
 export default function DashboardClient() {
@@ -51,12 +51,12 @@ export default function DashboardClient() {
     setStatsError(null)
     try {
       const res = await fetch("/api/admin/stats")
-      if (!res.ok) throw new Error("ไม่สามารถโหลดข้อมูลสถิติได้")
+      if (!res.ok) throw new Error("Failed to load statistics")
       const data = await res.json()
       setStats(data)
     } catch (err) {
       setStatsError(
-        err instanceof Error ? err.message : "เกิดข้อผิดพลาด"
+        err instanceof Error ? err.message : "An error occurred"
       )
     } finally {
       setStatsLoading(false)
@@ -68,7 +68,7 @@ export default function DashboardClient() {
       setRevenueLoading(true)
       try {
         const res = await fetch(`/api/admin/revenue?period=${p}`)
-        if (!res.ok) throw new Error("ไม่สามารถโหลดข้อมูลรายได้")
+        if (!res.ok) throw new Error("Failed to load revenue data")
         const data = await res.json()
         setRevenue(data)
       } catch {
@@ -85,12 +85,12 @@ export default function DashboardClient() {
     setOrdersError(null)
     try {
       const res = await fetch("/api/admin/orders?limit=5")
-      if (!res.ok) throw new Error("ไม่สามารถโหลดข้อมูลออเดอร์ได้")
+      if (!res.ok) throw new Error("Failed to load orders")
       const data = await res.json()
       setOrders(data.orders)
     } catch (err) {
       setOrdersError(
-        err instanceof Error ? err.message : "เกิดข้อผิดพลาด"
+        err instanceof Error ? err.message : "An error occurred"
       )
     } finally {
       setOrdersLoading(false)
@@ -124,7 +124,7 @@ export default function DashboardClient() {
           : statsError
             ? (
               <div className="col-span-full flex flex-col items-center gap-2 py-8 text-center">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[13px] text-text-secondary">
                   {statsError}
                 </p>
                 <Button
@@ -133,7 +133,7 @@ export default function DashboardClient() {
                   onClick={fetchStats}
                 >
                   <RefreshCwIcon className="size-3" />
-                  ลองใหม่
+                  Retry
                 </Button>
               </div>
             )
@@ -141,27 +141,27 @@ export default function DashboardClient() {
               ? (
                 <>
                   <KpiCard
-                    title="ยอดขายวันนี้"
+                    title="Today's Sales"
                     value={currency.format(stats.todaySales)}
                     icon={DollarSignIcon}
                   />
                   <KpiCard
-                    title="ออเดอร์วันนี้"
+                    title="Today's Orders"
                     value={stats.todayOrders.toLocaleString()}
                     icon={ShoppingCartIcon}
                   />
                   <KpiCard
-                    title="ออเดอร์ที่รอดำเนินการ"
+                    title="Pending Orders"
                     value={stats.pendingOrders.toLocaleString()}
                     icon={ClockIcon}
                   />
                   <KpiCard
-                    title="สินค้าทั้งหมด"
+                    title="Total Products"
                     value={stats.totalProducts.toLocaleString()}
                     icon={PackageIcon}
                   />
                   <KpiCard
-                    title="ผู้ใช้ทั้งหมด"
+                    title="Total Users"
                     value={stats.totalUsers.toLocaleString()}
                     icon={UsersIcon}
                   />

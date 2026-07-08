@@ -32,9 +32,9 @@ import {
 } from "lucide-react"
 import type { AdminProduct, CategoryOption } from "@/types/admin"
 
-const currency = new Intl.NumberFormat("th-TH", {
+const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "THB",
+  currency: "USD",
 })
 
 export default function ProductsClient() {
@@ -63,7 +63,7 @@ export default function ProductsClient() {
       setTotalPages(json.data.totalPages)
     } catch (err) {
       const msg =
-        err instanceof Error ? err.message : "ไม่สามารถโหลดรายการสินค้าได้"
+        err instanceof Error ? err.message : "Failed to load products"
       toast.error(msg)
     } finally {
       setLoading(false)
@@ -121,17 +121,17 @@ export default function ProductsClient() {
       <Card className="@container/card">
         <CardHeader>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <CardTitle>สินค้า ({total})</CardTitle>
+            <CardTitle>Products ({total})</CardTitle>
             <Button onClick={openCreate}>
               <PlusIcon className="size-4" />
-              เพิ่มสินค้า
+              Add Product
             </Button>
           </div>
           <div className="relative">
-            <SearchIcon className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral" />
             <Input
-              className="pl-8"
-              placeholder="ค้นหาสินค้า..."
+              className="pl-9"
+              placeholder="Search products..."
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
             />
@@ -145,22 +145,22 @@ export default function ProductsClient() {
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="py-8 text-center text-sm text-muted-foreground">
-              {search ? "ไม่พบสินค้าที่ค้นหา" : "ยังไม่มีสินค้า"}
+            <div className="py-8 text-center text-[13px] text-text-secondary">
+              {search ? "No products found" : "No products yet"}
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ชื่อสินค้า</TableHead>
+                  <TableHead>Product Name</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    คำอธิบาย
+                    Description
                   </TableHead>
-                  <TableHead>ราคา</TableHead>
+                  <TableHead>Price</TableHead>
                   <TableHead className="hidden sm:table-cell">
-                    หมวดหมู่
+                    Category
                   </TableHead>
-                  <TableHead className="w-20">จัดการ</TableHead>
+                  <TableHead className="w-20">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -169,7 +169,7 @@ export default function ProductsClient() {
                     <TableCell className="font-medium">
                       {product.name}
                     </TableCell>
-                    <TableCell className="hidden max-w-xs truncate md:table-cell text-muted-foreground">
+                    <TableCell className="hidden max-w-xs truncate md:table-cell text-text-secondary">
                       {product.description || "-"}
                     </TableCell>
                     <TableCell>{currency.format(product.price)}</TableCell>
@@ -184,7 +184,7 @@ export default function ProductsClient() {
                           onClick={() => openEdit(product)}
                         >
                           <PencilIcon className="size-3" />
-                          <span className="sr-only">แก้ไข</span>
+                          <span className="sr-only">Edit</span>
                         </Button>
                         <Button
                           variant="ghost"
@@ -192,7 +192,7 @@ export default function ProductsClient() {
                           onClick={() => setDeleteTarget(product)}
                         >
                           <Trash2Icon className="size-3" />
-                          <span className="sr-only">ลบ</span>
+                          <span className="sr-only">Delete</span>
                         </Button>
                       </div>
                     </TableCell>
@@ -203,9 +203,9 @@ export default function ProductsClient() {
           )}
         </CardContent>
         {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t px-6 py-3">
-            <p className="text-sm text-muted-foreground">
-              หน้า {page} จาก {totalPages}
+          <div className="flex items-center justify-between border-t border-border px-6 py-3">
+            <p className="text-[13px] text-text-secondary">
+              Page {page} of {totalPages}
             </p>
             <div className="flex gap-1">
               <Button
@@ -215,7 +215,7 @@ export default function ProductsClient() {
                 onClick={() => setPage(page - 1)}
               >
                 <ChevronLeftIcon className="size-4" />
-                ก่อนหน้า
+                Previous
               </Button>
               <Button
                 variant="outline"
@@ -223,7 +223,7 @@ export default function ProductsClient() {
                 disabled={page >= totalPages}
                 onClick={() => setPage(page + 1)}
               >
-                ถัดไป
+                Next
                 <ChevronRightIcon className="size-4" />
               </Button>
             </div>

@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Menu } from "lucide-react";
@@ -20,13 +20,13 @@ export const NavigationSheet = () => {
       </VisuallyHidden>
 
       <SheetTrigger asChild>
-        <Button size="icon" variant="outline">
-          <Menu />
+        <Button size="icon-sm" variant="ghost">
+          <Menu className="size-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent className="px-6 py-3">
+      <SheetContent className="px-6 py-4">
         <Logo />
-        <NavMenu className="mt-6 [&>div]:h-full" orientation="vertical" />
+        <NavMenu className="mt-8 flex-col items-start gap-1" />
       </SheetContent>
     </Sheet>
   );

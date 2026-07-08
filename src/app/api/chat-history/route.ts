@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
-// GET /api/chat-history — list ของ user
+// GET /api/chat-history — list user's threads
 export async function GET() {
     try {
         const session = await auth.api.getSession({
@@ -45,7 +45,7 @@ export async function GET() {
     }
 }
 
-// DELETE /api/chat-history — ลบ thread (ทั้ง index row และ checkpoint blobs)
+// DELETE /api/chat-history — delete thread (both index row and checkpoint blobs)
 export async function DELETE(req: NextRequest) {
     try {
         const session = await auth.api.getSession({
@@ -62,7 +62,7 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: 'Session ID required' }, { status: 400 });
         }
 
-        // ตรวจ ownership ก่อน — ถ้า thread ไม่ใช่ของ user คนนี้ห้ามลบ
+        // Verify ownership — deny if thread doesn't belong to this user
         const owned = await prisma.chatThread.findFirst({
             where: { threadId: sessionId, userId },
             select: { threadId: true },

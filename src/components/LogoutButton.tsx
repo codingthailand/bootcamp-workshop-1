@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { authClient } from "@/lib/auth-client";
 import { Button } from "./ui/button";
@@ -16,8 +16,8 @@ export default function LogoutButton() {
   }
 
   return (
-    <Button onClick={handleLogout}>
-      ออกจากระบบ
+    <Button onClick={handleLogout} variant="ghost" size="sm">
+      Sign Out
     </Button>
   );
 }

@@ -6,16 +6,16 @@ import { SKILLS } from "@/skills";
 export const getCurrentDateTool = tool(
   () => {
     const currentDate = new Date();
-    return currentDate.toLocaleDateString('th-TH') + ' ' + currentDate.toLocaleTimeString('th-TH');
+    return currentDate.toLocaleDateString('en-US') + ' ' + currentDate.toLocaleTimeString('en-US');
   },
   {
     name: "get_current_date",
-    description: "ดึงวันที่และเวลาปัจจุบัน เมื่อผู้ใช้ถามเกี่ยวกับวันที่และเวลา",
+    description: "Get the current date and time when the user asks about it",
     schema: z.object({}),
   }
 );
 
-// เครื่องมือสำหรับตอบข้อมูลสินค้า
+// Tool for answering product information
 export const searchAllProductTool = tool(
   async ({ query }) => {
     const keyword = query.trim();
@@ -25,7 +25,7 @@ export const searchAllProductTool = tool(
     if (!keyword) {
       return JSON.stringify({
         success: false,
-        message: "กรุณาระบุคำค้นหาสินค้า",
+        message: "Please provide a product search query",
         data: [],
       });
     }

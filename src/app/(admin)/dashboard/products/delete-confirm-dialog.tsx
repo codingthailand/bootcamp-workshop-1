@@ -39,15 +39,15 @@ export function DeleteConfirmDialog({
       const json = await res.json()
 
       if (!json.success) {
-        toast.error(json.error || "เกิดข้อผิดพลาด")
+        toast.error(json.error || "Something went wrong")
         return
       }
 
-      toast.success(`ลบ "${product.name}" สำเร็จ`)
+      toast.success(`Deleted "${product.name}"`)
       onOpenChange(false)
       onSuccess()
     } catch {
-      toast.error("เกิดข้อผิดพลาด กรุณาลองใหม่")
+      toast.error("Something went wrong. Please try again.")
     } finally {
       setDeleting(false)
     }
@@ -57,24 +57,24 @@ export function DeleteConfirmDialog({
     <AlertDialog open={!!product} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>ยืนยันการลบสินค้า</AlertDialogTitle>
+          <AlertDialogTitle>Delete Product</AlertDialogTitle>
           <AlertDialogDescription>
-            คุณแน่ใจหรือไม่ว่าต้องการลบ{' '}
+            Are you sure you want to delete{" "}
             <span className="font-medium text-foreground">
               {product?.name}
             </span>
-            {' '}? การกระทำนี้ไม่สามารถยกเลิกได้
+            ? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={deleting}>ยกเลิก</AlertDialogCancel>
+          <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             disabled={deleting}
             onClick={handleDelete}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/80"
           >
             {deleting && <Spinner className="size-4" />}
-            ลบ
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -7,7 +7,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardAction,
 } from "@/components/ui/card"
 import {
   ChartContainer,
@@ -21,11 +20,11 @@ import type { RevenuePoint } from "@/types/admin"
 
 const chartConfig = {
   revenue: {
-    label: "รายได้",
+    label: "Revenue",
     color: "var(--primary)",
   },
   orders: {
-    label: "ออเดอร์",
+    label: "Orders",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig
@@ -38,9 +37,9 @@ interface RevenueChartProps {
 }
 
 function formatRevenue(value: number) {
-  return new Intl.NumberFormat("th-TH", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "THB",
+    currency: "USD",
   }).format(value)
 }
 
@@ -53,17 +52,17 @@ export function RevenueChart({
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle>รายได้</CardTitle>
-        <CardAction>
+        <div className="flex items-center justify-between">
+          <CardTitle>Revenue</CardTitle>
           <PeriodSelector value={period} onValueChange={onPeriodChange} />
-        </CardAction>
+        </div>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         {loading ? (
           <Skeleton className="h-[250px] w-full" />
         ) : data.length === 0 ? (
           <div className="flex h-[250px] items-center justify-center text-muted-foreground">
-            ไม่มีข้อมูล
+            No data
           </div>
         ) : (
           <ChartContainer
@@ -84,7 +83,7 @@ export function RevenueChart({
                 axisLine={false}
                 tickMargin={8}
                 tickFormatter={(value) =>
-                  `฿${(value / 1000).toFixed(0)}k`
+                  `$${(value / 1000).toFixed(0)}k`
                 }
               />
               <ChartTooltip
@@ -109,7 +108,7 @@ export function RevenueChart({
                             {chartConfig[name as keyof typeof chartConfig]?.label}
                           </span>
                           <span className="ml-auto font-mono font-medium tabular-nums">
-                            {value} รายการ
+                            {value} items
                           </span>
                         </div>
                       )

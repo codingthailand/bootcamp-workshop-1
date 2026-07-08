@@ -23,11 +23,11 @@ import type { AdminOrderItem } from "@/types/admin"
 
 const statusMap: Record<
   string,
-  { label: string; variant: "default" | "secondary" | "outline" }
+  { label: string; variant: "success" | "warning" | "secondary" }
 > = {
-  processing: { label: "กำลังดำเนินการ", variant: "secondary" },
-  received: { label: "รับแล้ว", variant: "default" },
-  delivered: { label: "จัดส่งแล้ว", variant: "outline" },
+  processing: { label: "Processing", variant: "warning" },
+  received: { label: "Received", variant: "success" },
+  delivered: { label: "Delivered", variant: "secondary" },
 }
 
 interface RecentOrdersTableProps {
@@ -37,9 +37,9 @@ interface RecentOrdersTableProps {
   onRetry: () => void
 }
 
-const currency = new Intl.NumberFormat("th-TH", {
+const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "THB",
+  currency: "USD",
 })
 
 export function RecentOrdersTable({
@@ -51,7 +51,7 @@ export function RecentOrdersTable({
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle>ออเดอร์ล่าสุด</CardTitle>
+        <CardTitle>Recent Orders</CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
@@ -62,25 +62,25 @@ export function RecentOrdersTable({
           </div>
         ) : error ? (
           <div className="flex flex-col items-center gap-2 py-8 text-center">
-            <p className="text-sm text-muted-foreground">{error}</p>
+            <p className="text-sm text-text-secondary">{error}</p>
             <Button variant="outline" size="sm" onClick={onRetry}>
               <RefreshCwIcon className="size-3" />
-              ลองใหม่
+              Retry
             </Button>
           </div>
         ) : orders.length === 0 ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">
-            ไม่มีออเดอร์
+          <div className="py-8 text-center text-sm text-text-secondary">
+            No orders
           </div>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>รหัส</TableHead>
-                <TableHead>ลูกค้า</TableHead>
-                <TableHead>วันที่</TableHead>
-                <TableHead>ยอดรวม</TableHead>
-                <TableHead>สถานะ</TableHead>
+                <TableHead>ID</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -97,7 +97,7 @@ export function RecentOrdersTable({
                     </TableCell>
                     <TableCell>{order.customerName}</TableCell>
                     <TableCell>
-                      {new Date(order.date).toLocaleDateString("th-TH")}
+                      {new Date(order.date).toLocaleDateString("en-US")}
                     </TableCell>
                     <TableCell>{currency.format(order.total)}</TableCell>
                     <TableCell>

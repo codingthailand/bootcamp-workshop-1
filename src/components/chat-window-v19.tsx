@@ -26,8 +26,8 @@ interface ChatAreaProps {
 }
 
 // ============================================================================
-// CHAT AREA COMPONENT - ใช้ useChat hook
-// แยกออกมาเพื่อใช้ key prop force re-mount เมื่อเปลี่ยน session
+// CHAT AREA COMPONENT - uses useChat hook
+// Separated so key prop forces re-mount on session change
 // ============================================================================
 
 function ChatArea({ sessionId, userId, initialMessages, onMessageComplete }: ChatAreaProps) {
@@ -94,7 +94,7 @@ function ChatArea({ sessionId, userId, initialMessages, onMessageComplete }: Cha
 
       {error && (
         <div className="p-2 sm:p-4 bg-destructive/10 text-destructive rounded mb-2 sm:mb-4 text-xs sm:text-sm">
-          {error.message || 'เกิดข้อผิดพลาดในการส่งข้อความ'}
+          {error.message || 'An error occurred while sending your message'}
         </div>
       )}
 

@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Error fetching revenue data:", error)
     return NextResponse.json(
-      { error: "ไม่สามารถโหลดข้อมูลรายได้" },
+      { error: "Failed to load revenue data" },
       { status: 500 }
     )
   }

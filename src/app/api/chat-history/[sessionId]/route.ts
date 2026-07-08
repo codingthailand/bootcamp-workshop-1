@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
-// ดึงเฉพาะ text ที่ user ต้องเห็น (ตัด thinking / tool_use blocks ทิ้ง)
+// Extract only text visible to the user (strip thinking / tool_use blocks)
 function extractText(content: BaseMessage["content"]): string {
     if (typeof content === 'string') return content;
     if (Array.isArray(content)) {
@@ -22,7 +22,7 @@ function extractText(content: BaseMessage["content"]): string {
     return '';
 }
 
-// GET /api/chat-history/[sessionId] — โหลด messages ทั้งหมดของ thread จาก checkpoint
+// GET /api/chat-history/[sessionId] — load all messages of a thread from checkpoint
 export async function GET(
     req: NextRequest,
     { params }: { params: Promise<{ sessionId: string }> }
@@ -43,7 +43,7 @@ export async function GET(
 
         const userId = session.user.id;
 
-        // ตรวจ ownership ผ่าน chat_threads
+        // Verify ownership via chat_threads
         const owned = await prisma.chatThread.findFirst({
             where: { threadId: sessionId, userId },
             select: { updatedAt: true },
@@ -53,7 +53,7 @@ export async function GET(
             return NextResponse.json({ error: 'Session not found or forbidden' }, { status: 403 });
         }
 
-        // ดึง checkpoint state ของ thread
+        // Retrieve checkpoint state of thread
         const checkpointer = await getCheckpointer();
         const tuple = await checkpointer.getTuple({ configurable: { thread_id: sessionId } });
         const messages = (tuple?.checkpoint?.channel_values?.messages ?? []) as BaseMessage[];
@@ -91,7 +91,7 @@ export async function GET(
                     };
                 }
 
-                // ข้าม ToolMessage / SystemMessage
+                // Skip ToolMessage / SystemMessage
                 return null;
             })
             .filter(Boolean);

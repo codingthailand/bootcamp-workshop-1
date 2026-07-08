@@ -30,7 +30,7 @@ export async function PUT(
 
     if (isNaN(productId)) {
       return NextResponse.json(
-        { success: false, error: "ID ไม่ถูกต้อง" } satisfies ApiResponse<never>,
+        { success: false, error: "Invalid ID" } satisfies ApiResponse<never>,
         { status: 400 }
       )
     }
@@ -41,7 +41,7 @@ export async function PUT(
 
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "ไม่พบสินค้า" } satisfies ApiResponse<never>,
+        { success: false, error: "Product not found" } satisfies ApiResponse<never>,
         { status: 404 }
       )
     }
@@ -51,7 +51,7 @@ export async function PUT(
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: "ข้อมูลไม่ถูกต้อง" } satisfies ApiResponse<never>,
+        { success: false, error: "Invalid data" } satisfies ApiResponse<never>,
         { status: 400 }
       )
     }
@@ -80,7 +80,7 @@ export async function PUT(
   } catch (error) {
     console.error("Error updating product:", error)
     return NextResponse.json(
-      { success: false, error: "ไม่สามารถแก้ไขสินค้าได้" } satisfies ApiResponse<never>,
+      { success: false, error: "Failed to update product" } satisfies ApiResponse<never>,
       { status: 500 }
     )
   }
@@ -103,7 +103,7 @@ export async function DELETE(
 
     if (isNaN(productId)) {
       return NextResponse.json(
-        { success: false, error: "ID ไม่ถูกต้อง" } satisfies ApiResponse<never>,
+        { success: false, error: "Invalid ID" } satisfies ApiResponse<never>,
         { status: 400 }
       )
     }
@@ -114,7 +114,7 @@ export async function DELETE(
 
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "ไม่พบสินค้า" } satisfies ApiResponse<never>,
+        { success: false, error: "Product not found" } satisfies ApiResponse<never>,
         { status: 404 }
       )
     }
@@ -127,7 +127,7 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          error: `ไม่สามารถลบสินค้าได้ เนื่องจากมีออเดอร์ที่เกี่ยวข้อง ${orderCount} รายการ`,
+          error: `Cannot delete product — ${orderCount} associated order(s) exist`,
         } satisfies ApiResponse<never>,
         { status: 409 }
       )
@@ -141,7 +141,7 @@ export async function DELETE(
   } catch (error) {
     console.error("Error deleting product:", error)
     return NextResponse.json(
-      { success: false, error: "ไม่สามารถลบสินค้าได้" } satisfies ApiResponse<never>,
+      { success: false, error: "Failed to delete product" } satisfies ApiResponse<never>,
       { status: 500 }
     )
   }

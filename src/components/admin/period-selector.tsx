@@ -18,9 +18,9 @@ export function PeriodSelector({ value, onValueChange }: PeriodSelectorProps) {
       }}
       variant="outline"
     >
-      <ToggleGroupItem value="7d">7 วัน</ToggleGroupItem>
-      <ToggleGroupItem value="30d">30 วัน</ToggleGroupItem>
-      <ToggleGroupItem value="90d">90 วัน</ToggleGroupItem>
+      <ToggleGroupItem value="7d">7 Days</ToggleGroupItem>
+      <ToggleGroupItem value="30d">30 Days</ToggleGroupItem>
+      <ToggleGroupItem value="90d">90 Days</ToggleGroupItem>
     </ToggleGroup>
   )
 }

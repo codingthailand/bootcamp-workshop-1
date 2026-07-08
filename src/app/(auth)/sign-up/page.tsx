@@ -28,23 +28,23 @@ const registerSchema = z
   .object({
     name: z
       .string()
-      .min(1, "กรุณากรอกชื่อ")
-      .min(2, "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร")
-      .max(50, "ชื่อต้องไม่เกิน 50 ตัวอักษร"),
+      .min(1, "Name is required")
+      .min(2, "Name must be at least 2 characters")
+      .max(50, "Name must not exceed 50 characters"),
     email: z
       .string()
-      .min(1, "กรุณากรอกอีเมล")
-      .email("รูปแบบอีเมลไม่ถูกต้อง"),
+      .min(1, "Email is required")
+      .email("Invalid email format"),
     password: z
       .string()
-      .min(1, "กรุณากรอกรหัสผ่าน")
-      .min(6, "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"),
+      .min(1, "Password is required")
+      .min(6, "Password must be at least 6 characters"),
     confirmPassword: z
       .string()
-      .min(1, "กรุณายืนยันรหัสผ่าน"),
+      .min(1, "Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "รหัสผ่านไม่ตรงกัน",
+    message: "Passwords do not match",
     path: ["confirmPassword"],
   })
 
@@ -69,7 +69,6 @@ export default function RegisterForm() {
       password: data.password
      }, {
       onSuccess: () => {
-        alert('สมัครสมาชิกสำเร็จ');
         router.replace('/sign-in');
       },
       onError: (ctx) => {
@@ -82,9 +81,9 @@ export default function RegisterForm() {
   <div className="min-h-screen flex items-center justify-center bg-background px-4">
     <Card className="w-full sm:max-w-md">
       <CardHeader>
-        <CardTitle>สมัครสมาชิก</CardTitle>
+        <CardTitle>Create Account</CardTitle>
         <CardDescription>
-          กรอกข้อมูลด้านล่างเพื่อสร้างบัญชีใหม่
+          Fill in the details below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -95,13 +94,13 @@ export default function RegisterForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-register-name">ชื่อ</FieldLabel>
+                  <FieldLabel htmlFor="form-register-name">Name</FieldLabel>
                   <Input
                     {...field}
                     id="form-register-name"
                     type="text"
                     aria-invalid={fieldState.invalid}
-                    placeholder="สมชาย ใจดี"
+                    placeholder="John Doe"
                     autoComplete="name"
                   />
                   {fieldState.invalid && (
@@ -115,7 +114,7 @@ export default function RegisterForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-register-email">อีเมล</FieldLabel>
+                  <FieldLabel htmlFor="form-register-email">Email</FieldLabel>
                   <Input
                     {...field}
                     id="form-register-email"
@@ -136,7 +135,7 @@ export default function RegisterForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-register-password">
-                    รหัสผ่าน
+                    Password
                   </FieldLabel>
                   <Input
                     {...field}
@@ -158,7 +157,7 @@ export default function RegisterForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-register-confirm-password">
-                    ยืนยันรหัสผ่าน
+                    Confirm Password
                   </FieldLabel>
                   <Input
                     {...field}
@@ -179,15 +178,15 @@ export default function RegisterForm() {
       </CardContent>
       <CardFooter className="flex flex-col gap-3">
         <Button type="submit" form="form-register" className="w-full">
-          สมัครสมาชิก
+          Create Account
         </Button>
-        <p className="text-center text-body-small text-muted-foreground">
-          มีบัญชีอยู่แล้ว?{" "}
+        <p className="text-center text-[13px] text-text-secondary">
+          Already have an account?{" "}
           <Link
             href="/sign-in"
             className="underline underline-offset-4 hover:text-primary"
           >
-            เข้าสู่ระบบ
+            Sign in
           </Link>
         </p>
       </CardFooter>

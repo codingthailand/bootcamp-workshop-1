@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
     const formatted: AdminOrderItem[] = orders.map((o) => ({
       id: o.id,
-      customerName: o.customers?.name || "ไม่ระบุ",
+      customerName: o.customers?.name || "Unknown",
       date: o.date?.toISOString() || new Date().toISOString(),
       total: Number(o.total_amount || 0),
       status: o.status || "processing",
@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Error fetching orders:", error)
     return NextResponse.json(
-      { error: "ไม่สามารถโหลดข้อมูลออเดอร์ได้" },
+      { error: "Failed to load orders" },
       { status: 500 }
     )
   }
