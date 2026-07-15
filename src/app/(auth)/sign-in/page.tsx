@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation"
 const loginSchema = z.object({
   email: z
     .string()
-    .min(2, "Email is required")
+    .min(1, "Email is required")
     .email("Invalid email format"),
   password: z
     .string()
