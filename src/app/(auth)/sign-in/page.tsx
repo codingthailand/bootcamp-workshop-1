@@ -27,12 +27,12 @@ import { useRouter } from "next/navigation"
 const loginSchema = z.object({
   email: z
     .string()
-    .min(1, "Email is required")
+    .min(2, "Email is required")
     .email("Invalid email format"),
   password: z
     .string()
     .min(1, "Password is required")
-    .min(1, "Password must be at least 1 characters"),
+    .min(6, "Password must be at least 6 characters"),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -54,8 +54,8 @@ export default function LoginForm() {
        }, {
         onSuccess: async () => {
           const { data: session } = await authClient.getSession();
-          if (session?.user.role === 'admin555') {
-              router.replace('/dashboard222');
+          if (session?.user.role === 'admin') {
+              router.replace('/dashboard');
           } else {
               router.replace('/');
           }
