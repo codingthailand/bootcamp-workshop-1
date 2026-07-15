@@ -5,11 +5,11 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/product", label: "Product" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-  { href: "/users", label: "Users" },
+  { href: "/", label: "หน้าหลัก" },
+  { href: "/product", label: "สินค้า" },
+  { href: "/about", label: "เกี่ยวกับ" },
+  { href: "/contact", label: "ติดต่อเรา" },
+  { href: "/users", label: "ข้อมูลผู้ใช้" },
 ];
 
 export const NavMenu = ({ className, ...props }: ComponentProps<"nav">) => (
