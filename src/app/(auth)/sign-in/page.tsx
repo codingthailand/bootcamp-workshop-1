@@ -32,7 +32,7 @@ const loginSchema = z.object({
   password: z
     .string()
     .min(1, "Password is required")
-    .min(6, "Password must be at least 6 characters"),
+    .min(1, "Password must be at least 1 characters"),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -54,8 +54,8 @@ export default function LoginForm() {
        }, {
         onSuccess: async () => {
           const { data: session } = await authClient.getSession();
-          if (session?.user.role === 'admin') {
-              router.replace('/dashboard');
+          if (session?.user.role === 'admin555') {
+              router.replace('/dashboard222');
           } else {
               router.replace('/');
           }
