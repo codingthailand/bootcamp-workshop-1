@@ -70,7 +70,7 @@ export default function LoginForm() {
   <div className="min-h-screen flex items-center justify-center bg-background px-4">
     <Card className="w-full sm:max-w-md">
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>เข้าระบบ</CardTitle>
         <CardDescription>
           Enter your email and password to sign in
         </CardDescription>
