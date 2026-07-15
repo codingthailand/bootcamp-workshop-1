@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useState } from "react"
 import { KpiCard, KpiCardSkeleton } from "@/components/admin/kpi-card"

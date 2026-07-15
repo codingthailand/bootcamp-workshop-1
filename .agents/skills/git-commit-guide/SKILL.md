@@ -1,6 +1,12 @@
 ---
 name: git-commit-guide
-description: Use this skill when committing code, writing commit messages, or reviewing git history in this Next.js project. Triggers on: "commit this", "write a commit message", "what should my commit say", "git commit", or any request to stage and commit changes. Provides project-specific conventional commit format, Thai-language comment conventions, and scope rules matched to this codebase's structure.
+description: >
+  Use this skill when committing code, writing commit messages, or reviewing
+  git history in this Next.js project. Triggers on: "commit this", "write a
+  commit message", "what should my commit say", "git commit", or any request
+  to stage and commit changes. Provides project-specific conventional commit
+  format, Thai-language comment conventions, and scope rules matched to this
+  codebase's structure.
 ---
 
 # Git Commit Guidelines

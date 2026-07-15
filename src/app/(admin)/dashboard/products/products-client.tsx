@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 import {
@@ -212,7 +211,7 @@ export default function ProductsClient() {
                 variant="outline"
                 size="sm"
                 disabled={page <= 1}
-                onClick={() => setPage(page - 1)}
+                onClick={() => setPage((p) => p - 1)}
               >
                 <ChevronLeftIcon className="size-4" />
                 Previous
@@ -221,7 +220,7 @@ export default function ProductsClient() {
                 variant="outline"
                 size="sm"
                 disabled={page >= totalPages}
-                onClick={() => setPage(page + 1)}
+                onClick={() => setPage((p) => p + 1)}
               >
                 Next
                 <ChevronRightIcon className="size-4" />
